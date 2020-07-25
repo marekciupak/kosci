@@ -7,13 +7,24 @@ import BiddingForm from './BiddingForm';
 import VerdictForm from './VerdictForm';
 import './App.css';
 
-function App({previousPlayerNumber, currentPlayerNumber, me, action, players, onRoll, onBidding, onCheck, onLoss}) {
+function App({
+  previousPlayerNumber,
+  currentPlayerNumber,
+  me,
+  action,
+  lastBid,
+  players,
+  onRoll,
+  onBidding,
+  onCheck,
+  onLoss,
+}) {
   const renderAction = () => {
     switch (action) {
       case Actions.ROLLING:
         return <RollForm numberOfDice={me.dice.length} onSubmit={handleRoll} />;
       case Actions.BIDDING:
-        return <BiddingForm onBidding={handleBidding} onCheck={handleCheck} />;
+        return <BiddingForm lastBid={lastBid} onBidding={handleBidding} onCheck={handleCheck} />;
       case Actions.CHECKING:
         return <VerdictForm onSubmit={handleVerdict} />;
       default:
@@ -62,6 +73,7 @@ App.propTypes = {
     dice: PropTypes.array.isRequired,
   }).isRequired,
   action: PropTypes.oneOf(Object.values(Actions)).isRequired,
+  lastBid: PropTypes.object,
   players: PropTypes.array.isRequired,
   onRoll: PropTypes.func.isRequired,
   onBidding: PropTypes.func.isRequired,

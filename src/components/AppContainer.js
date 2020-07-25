@@ -108,15 +108,6 @@ function AppContainer() {
     } else throw Error.new('The losing player had no dice!');
   };
 
-  const playersExt = players.map((player, number) => ({
-    ...player,
-    number: number,
-    isCurrent: number === status.currentPlayerNumber,
-    isMe: number === me.number,
-  }));
-
-  console.debug(state);
-
   if (me.number === null) {
     return <p>Game over!</p>;
   }
@@ -125,12 +116,22 @@ function AppContainer() {
     return <p>You won!</p>;
   }
 
+  const previousPlayerNumber = status.currentPlayerNumber === 0 ? players.length - 1 : status.currentPlayerNumber - 1;
+
+  const playersExt = players.map((player, number) => ({
+    ...player,
+    number: number,
+    isCurrent: number === status.currentPlayerNumber,
+    isMe: number === me.number,
+  }));
+
   return (
     <App
       currentPlayerNumber={status.currentPlayerNumber}
-      previousPlayerNumber={status.currentPlayerNumber === 0 ? players.length - 1 : status.currentPlayerNumber - 1}
+      previousPlayerNumber={previousPlayerNumber}
       me={playersExt[me.number]}
       action={status.action}
+      lastBid={players[previousPlayerNumber].bid}
       players={playersExt}
       onRoll={handleRoll}
       onBidding={handleBidding}

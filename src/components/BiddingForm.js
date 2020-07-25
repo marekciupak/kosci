@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
-function BiddingForm({onBidding, onCheck}) {
+function BiddingForm({lastBid, onBidding, onCheck}) {
   const [occurrences, setOccurrences] = useState('');
   const [pips, setPips] = useState('');
 
@@ -30,7 +30,7 @@ function BiddingForm({onBidding, onCheck}) {
           <input
             type="number"
             required
-            min="1"
+            min={lastBid ? lastBid.occurrences : 1}
             name="occurrences"
             value={occurrences}
             onChange={handleOccurrencesChange}
@@ -42,14 +42,20 @@ function BiddingForm({onBidding, onCheck}) {
         </label>
         <input type="submit" value="Bid" />
       </form>
-      <button type="button" onClick={handleCheck}>
-        Check
-      </button>
+      {lastBid && (
+        <button type="button" onClick={handleCheck}>
+          Check {lastBid.occurrences} x {lastBid.pips}
+        </button>
+      )}
     </React.Fragment>
   );
 }
 
 BiddingForm.propTypes = {
+  lastBid: PropTypes.shape({
+    occurrences: PropTypes.number.isRequired,
+    pips: PropTypes.oneOf([1, 2, 3, 4, 5, 6]).isRequired,
+  }),
   onBidding: PropTypes.func.isRequired,
   onCheck: PropTypes.func.isRequired,
 };
